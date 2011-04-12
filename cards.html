@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<meta name="viewport" content="width=device-width" />
+<link rel="stylesheet" href="quiz.css" type="text/css" />
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="quiz.js"></script>
+
+<script type="text/javascript">
+   if (navigator.userAgent.indexOf('iPhone') != -1) {
+      document.write('<link rel="stylesheet" href="iphone.css" type="text/css" />');
+   } else if (navigator.userAgent.indexOf('Android') != -1) {
+      document.write('<link rel="stylesheet" href="android.css" type="text/css" />');
+   } else {
+      document.write('<link rel="stylesheet" href="desktop.css" type="text/css" />');
+   }
+
+function setupTestData() {
+   try {
+      quiz.initialize();
+      if (quiz.cards.length > 0) {
+         jQuery.each(quiz.cards,function (index, value) {
+            $("#mainContent").append(quiz.render(index,value));
+         });
+         $(".entry").click (function() {$(this).find(".details").toggle();});
+         $(".details").hide();
+      }
+   } catch (e) {
+      alert(e);
+   }
+}
+   
+</script>
+   
+<title>Quiz</title>
+</head>
+<body onload="setupTestData();">
+<div id="mainContainer">
+   <div id="header">
+      <h1>Cards</h1>
+   </div>
+   <div id="mainContent">
+   </div>
+   <a href="q.php">Help</a>
+</div> 
+</body>
+</html>

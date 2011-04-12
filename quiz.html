@@ -1,0 +1,241 @@
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.3 user-scalable=yes" />
+	<style type="text/css" >
+		body
+		{
+		    width: 320px;			overflow: hidden;
+		}
+		#surface
+		{
+			width: 100%;
+			height: 100%;
+		}
+		#prevcard
+		{
+		}
+		#card
+		{
+			height: 80%;
+			width: 80%;
+			left:0;
+			top:0;
+			border: solid 3px #f0f0f0;
+			position: absolute;
+			background-color: yellowgreen;
+		}
+		#nextcard
+		{
+		}
+		#controls
+		{
+			position:absolute;
+			vertical-align:bottom;
+			width:100%;
+			top:90%;
+			background-color:Gray;
+		}
+		#list
+		{
+			height: 100%;
+			position: absolute;
+			background-color: green;
+		}
+	</style>
+	<meta name="viewport" content="width=device-width" />
+	<link rel="stylesheet" href="quiz.css" type="text/css" />
+	<script type="text/javascript" src="jquery.js"></script>
+	<script type="text/javascript" src="http://jtemplates.tpython.com/jTemplates/jquery-jtemplates.js"></script>
+	<script type="text/javascript" src="quiz.js"></script>
+
+<script type="text/javascript">
+	if (navigator.userAgent.indexOf('iPhone') != -1) {
+		document.write('<link rel="stylesheet" href="iphone.css" type="text/css" />');
+	} else if (navigator.userAgent.indexOf('Android') != -1) {
+		document.write('<link rel="stylesheet" href="android.css" type="text/css" />');
+	} else {
+		document.write('<link rel="stylesheet" href="desktop.css" type="text/css" />');
+	}
+
+	function setupTestData() {
+		try {
+			quiz.currentCardChanged = function () {
+				$('#card').html(quiz.render(quiz.currentCardIndex, quiz.currentCard));
+			}
+			$('#prevButton').click(function () {
+				alert("test");
+				this.quiz.previousCard();
+			});
+			$('#nextButton').click(function () {
+				this.quiz.nextCard();
+			});
+			$('#card').click(function () {
+				$(this).find(".back").toggle();
+				$(this).find(".front").toggle();
+			});
+
+			quiz.initialize();
+//			if (quiz.cards.length > 0) {
+//				jQuery.each(quiz.cards, function (index, value) {
+//					$("#mainContent").append(quiz.render(index, value));
+//				});
+//				$(".entry").click(function () { $(this).find(".details").toggle(); });
+//				$(".details").hide();
+//			}
+		} catch (e) {
+			alert(e);
+		}
+	}
+   
+</script>
+
+	<!--<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js'></script>-->
+	<script type="text/javascript">
+		var down_x = null;
+		var up_x = null;
+		var mouse_down = false;
+		var speed = 300;
+
+		$().ready(function () {
+			var surf = $("#surface");
+			var pos = surf.position();
+			var winW = $(window).width();
+			//$("#second").css('top', pos.top).css('left', winW - 200).css('width', first.width() - 200);
+			//$("#third").css('top', pos.top).css('left', winW - 100).css('width', first.width() - 300);
+			//register swipe
+			register_swipe($("#card"), card_swipe);
+			register_swipe($("#third"), third_swipe);
+
+			setupTestData();
+
+			$("#info").setTemplate("Template by {$T.bold()} version <em>{$Q.version}</em>.");
+			$("#info").processTemplate("jTemplates");
+		});
+
+		function card_swipe() {
+			if ((down_x - up_x) > 50) {
+				card_swipe_left();
+			}
+			else if ((up_x - down_x) > 50) {
+				card_swipe_right();
+				third_swipe_right();
+			}
+		}
+
+		function card_swipe_left() {
+			this.quiz.previousCard();
+			$("#card").animate({ left: -320 }, speed);
+		}
+		function card_swipe_right() {
+			this.quiz.nextCard();
+			var winW = $(window).width();
+			$("#card").animate({ left: winW + 320}, speed);
+		}
+
+		function third_swipe() {
+			if ((down_x - up_x) > 50) {
+				card_swipe_left();
+				third_swipe_left();
+			}
+			else if ((up_x - down_x) > 50) {
+				third_swipe_right();
+			}
+		}
+
+		function third_swipe_left() {
+			$("#third").animate({ left: 300 }, speed);
+		}
+
+		function third_swipe_right() {
+			var winW = $(window).width();
+			$("#third").animate({ left: winW - 100 }, speed);
+		}
+
+		function register_swipe(div, callback) {
+			div.mousedown(function (e) {
+				e.preventDefault();
+				down_x = e.pageX;
+				up_x = e.pageX;
+				mouse_down = true;
+				$("body").unbind();
+				$("body").mousemove(function (e) {
+					if (mouse_down) {
+						var diff = e.pageX - up_x;
+						var left = parseInt(div.css('left').replace('px', ''));
+						div.css('left', left + diff);
+						up_x = e.pageX;
+					}
+				});
+				$("body").mouseup(function (e) {
+					up_x = e.pageX;
+					callback();
+					$(this).unbind();
+					mouse_down = false;
+				});
+			});
+			div.bind('touchstart', function (e) {
+				down_x = e.originalEvent.touches[0].pageX;
+				up_x = down_x;
+				$("body").unbind();
+				$("body").bind('touchmove', function (e) {
+					e.preventDefault();
+					var diff = e.originalEvent.touches[0].pageX - up_x;
+					var left = parseInt(div.css('left').replace('px', ''));
+					div.css('left', left + diff);
+					up_x = e.originalEvent.touches[0].pageX;
+				});
+				$("body").bind('touchend', function (e) {
+					callback();
+					$(this).unbind();
+				});
+			});
+		}
+</script>
+
+	<title>InstantCards</title>
+</head>
+<body>
+	<!-- Template content (Valid XHTML 1.1) --> 
+	<p style="display:none"><textarea id="template" rows="0" cols="0"><!--
+		{#template MAIN}
+			{* this is comment *}
+			{$T} {* $T == $T.toSource() *}
+			<table>
+				{#foreach $T.table as record}
+					{#include ROW root=$T.record}
+				{#/for}
+			</table>
+		{#/template MAIN}
+		
+		{#template ROW}
+			<tr class="{#cycle values=['bcEEC','bcCEE']}">
+					<td>{$T.name}</td>
+					<td>{$T.mail}</td>
+			</tr>
+		{#/template ROW}
+	--></textarea></p> 
+
+	<div id="surface">
+		<div class="info">
+		</div>
+		<div id="prevcard">
+		</div>
+		<div id="card">
+		</div>
+		<div id="nextcard">
+		</div>
+		<div id="controls">
+		<button id="prevButton">Prev</button>
+		<button id="nextButton">Next</button>
+		</div>
+		<div id="third">
+			Swipe me
+		</div>
+	</div>
+
+	<div id="credits">
+		<div>
+			Portions based on a demo from <a href="http://james.limsbros.com/">James Lin</a></div>
+	</div>
+</body>
+</html>

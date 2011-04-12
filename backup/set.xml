@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CoboCards>
+     <set name="Mandarin" />
+     <card content="{&lt;br&gt;| Ni | Pr | You |&lt;br&gt;}" last_learned="0" level="1" source="" tags="L1,pr" title="[Pic1]&lt;br&gt;">
+          <images>
+               <image path="data/1o2n10411.jpg" />
+          </images>
+     </card>
+     <card content="{&lt;br&gt;| Hao | adj | Fine; Good; Nice; OK; It&apos;s settled |&lt;br&gt;&lt;br&gt;}" last_learned="0" level="1" source="" tags="adj,L1" title="[Pic1]">
+          <images>
+               <image path="data/6f9ky0411.jpg" />
+          </images>
+     </card>
+     <card content="{&lt;br&gt;|qing|v|please (polite form of request); to treat or invite (somebody)|&lt;br&gt;}" last_learned="0" level="1" source="Lesson 1" tags="v" title="[Pic1]">
+          <images>
+               <image path="data/34hnk0411.jpg" />
+          </images>
+     </card>
+</CoboCards>
